@@ -19,9 +19,17 @@ const urlDatabase = {
 };
   
 app.post("/urls", (req, res) => {
-  console.log(req.body); // Log the POST request body to the console
-  res.send("Ok"); // Respond with 'Ok' (we will replace this)
+  const shortURL = generateRandomString(); // generate a short URL id
+  urlDatabase[shortURL] = { longURL: req.body.longURL }; // save longURL to database
+  res.redirect(`/urls/${shortURL}`); // redirect to the new URL show page
 });
+
+app.get("/u/:id", (req, res) => {
+  const id = req.params.id;
+  const longURL = urlDatabase[id].longURL;
+  res.redirect(longURL);
+});
+
 
 
 app.get("/urls/new", (req, res) => {
