@@ -33,6 +33,17 @@ const users = {
   },
 };
 
+const getUserByEmail = (email, users) => {
+  for (const userId in users) {
+    const user = users[userId];
+    if (user.email === email) {
+      return user;
+    }
+  }
+  return null;
+};
+
+
 // The routes
 
 app.get("/register", (req, res) => {
@@ -41,14 +52,28 @@ app.get("/register", (req, res) => {
 
 app.post("/register", (req, res) => {
   const { email, password } = req.body;
-  const id = generateRandomString();
 
+  // Error condition 1: Missing email or password
+  if (!email || !password) {
+    return res.status(400).send("Email and password cannot be empty.");
+  }
+
+  // Error condition 2: Email already registered
+  const existingUser = getUserByEmail(email, users);
+  if (existingUser) {
+    return res.status(400).send("Email already exists.");
+  }
+
+  const id = generateRandomString();
   const newUser = { id, email, password };
   users[id] = newUser;
+
+  console.log("Updated users:", users);
 
   res.cookie("user_id", id);
   res.redirect("/urls");
 });
+
 
 app.post("/login", (req, res) => {
   const username = req.body.username;
