@@ -5,13 +5,14 @@ const PORT = 8080;
 
 const cookieSession = require("cookie-session");
 const bcrypt = require("bcryptjs");
+const { getUserByEmail } = require("./helpers");
 
 app.set("view engine", "ejs");
 app.use(express.urlencoded({ extended: true }));
 app.use(
   cookieSession({
     name: "session",
-    keys: ["ligthouse-secret-key"],
+    keys: ["lighthouse-secret-key"],
   })
 );
 
@@ -23,12 +24,8 @@ function generateRandomString() {
 
 // Databases
 const urlDatabase = {
-  b6UTxQ: {
-    longURL: "https://www.tsn.ca",
-    userID: "potato" },
-  i3BoGr: {
-    longURL: "https://www.google.ca",
-    userID: "guest" },
+  b6UTxQ: { longURL: "https://www.tsn.ca", userID: "potato" },
+  i3BoGr: { longURL: "https://www.google.ca", userID: "guest" },
 };
 
 const users = {
@@ -42,16 +39,6 @@ const users = {
     email: "guest@apple.com",
     password: bcrypt.hashSync("tinyguest", 10),
   },
-};
-
-const getUserByEmail = (email, users) => {
-  for (const userId in users) {
-    const user = users[userId];
-    if (user.email === email) {
-      return user;
-    }
-  }
-  return null;
 };
 
 const urlsForUser = function(id) {
