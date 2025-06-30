@@ -97,7 +97,7 @@ app.post("/logout", (req, res) => {
 app.post("/urls", (req, res) => {
   const userId = req.cookies["user_id"];
   if (!users[userId]) {
-    return res.status(401).send("You must be logged in to shorten URLs.");
+    return res.status(401).send("You must be logged in.");
   }
   const shortURL = generateRandomString();
   urlDatabase[shortURL] = { longURL: req.body.longURL };
