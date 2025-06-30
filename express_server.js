@@ -30,6 +30,15 @@ app.post("/urls/:id/delete", (req, res) => {
   res.redirect("/urls");
 });
 
+app.post('/urls/:id', (req, res) => {
+  const shortURL = req.params.id;
+  const newLongURL = req.body.longURL;
+
+  urlDatabase[shortURL].longURL = newLongURL;
+  res.redirect('/urls');
+});
+
+
 
 app.get("/u/:id", (req, res) => {
   const id = req.params.id;
@@ -51,14 +60,14 @@ app.get("/urls/new", (req, res) => {
 
 
 
-app.get('/u/:id', (req, res) => {
-  const shortURL = req.params.id; // The short URL code
-  const entry = urlDatabase[shortURL]; // Lookup in the database
-  if (!entry) {
-    return res.status(404).send('Short URL not found');
-  }
-  res.redirect(entry.longURL); // Redirect if found
-});
+// app.get('/u/:id', (req, res) => {
+//   const shortURL = req.params.id; // The short URL code
+//   const entry = urlDatabase[shortURL]; // Lookup in the database
+//   if (!entry) {
+//     return res.status(404).send('Short URL not found');
+//   }
+//   res.redirect(entry.longURL); // Redirect if found
+// });
 
 app.get('/urls/:id', (req, res) => {
   const templateVars = {

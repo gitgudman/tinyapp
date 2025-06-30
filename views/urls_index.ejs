@@ -24,9 +24,11 @@
       <table class="table">
         <thead>
           <tr>
-            <th scope="col">Short URL ID</th>
-            <th scope="col">Long URL</th>
-          </tr>
+            <th>Short URL ID</th>
+            <th>Long URL</th>
+            <th>Edit</th>
+            <th>Delete</th>          
+        </tr>
         </thead>
         <tbody>
             <% for (let id in urls) { %>
@@ -35,9 +37,14 @@
                     <td><%= id %></td>
                     <td><%= urls[id].longURL %></td>
                     <td>
-                      <form method="POST" action="/urls/<%= id %>/delete">
-                        <button type="submit">Delete</button>
-                      </form>
+                        <a href="/urls/<%= id %>">
+                            <button style="color: blue; border: 1px solid blue; background-color: white;">Edit</button>
+
+                </td>
+                <td>
+                    <form method="POST" action="/urls/<%= id %>/delete" style="display: inline;">
+                        <button type="submit" style="color: red; border: 1px solid red; background-color: white;">Delete</button>
+                        </form>
                     </td>
                   </tr>
                 <% } %> <!-- And this line -->
@@ -45,6 +52,8 @@
               
                       </tbody>
       </table>
+
+      
     </main>
     <!-- Bootstrap JS -->
     <script
