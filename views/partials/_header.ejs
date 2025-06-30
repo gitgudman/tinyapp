@@ -6,25 +6,20 @@
         <a class="nav-item nav-link" href="/urls/new">Create New URL</a>
       </div>
   
-      <% if (username) { %>
-        <span class="navbar-text text-white mr-3">
-          Logged in as: <%= username %>!
-        </span>
+      <% if (user) { %>
+        <div class="ml-auto text-white">
+          Logged in as: <%= user.email %>!
+        </div>
         <form method="POST" action="/logout">
-          <button type="submit" class="btn btn-outline-light">Logout</button>
+          <button class="btn btn-outline-light ml-2" type="submit">Logout</button>
         </form>
       <% } else { %>
-        <form method="POST" action="/login" class="form-inline">
-          <input
-            type="text"
-            name="username"
-            placeholder="Username"
-            class="form-control mr-2"
-            required
-          >
-          <button type="submit" class="btn btn-light">Login</button>
+        <form method="POST" action="/login" class="form-inline ml-auto">
+          <input type="text" name="username" class="form-control mr-2" placeholder="Username">
+          <button class="btn btn-light" type="submit">Login</button>
         </form>
       <% } %>
+      
     </div>
 </nav>
   
