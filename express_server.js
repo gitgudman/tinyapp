@@ -43,7 +43,6 @@ const getUserByEmail = (email, users) => {
   return null;
 };
 
-
 // The routes
 
 app.get("/login", (req, res) => {
@@ -57,12 +56,10 @@ app.get("/register", (req, res) => {
 app.post("/register", (req, res) => {
   const { email, password } = req.body;
 
-  // Error condition 1: Missing email or password
   if (!email || !password) {
     return res.status(400).send("Email and password cannot be empty.");
   }
 
-  // Error condition 2: Email already registered
   const existingUser = getUserByEmail(email, users);
   if (existingUser) {
     return res.status(400).send("Email already exists.");
@@ -79,14 +76,30 @@ app.post("/register", (req, res) => {
 });
 
 app.post("/login", (req, res) => {
-  const username = req.body.username;
-  res.cookie("username", username);
+  const { email, password } = req.body;
+  const user = getUserByEmail(email, users);
+
+  if (!user) {
+    return res.status(403).send("No user with that email found.");
+  }
+
+  if (user.password !== password) {
+    return res.status(403).send("Incorrect password.");
+  }
+
+  for (const userId in users) {
+    if (users[userId].email === user.email) {
+      res.cookie("user_id", userId);
+      break;
+    }
+  }
+
   res.redirect("/urls");
 });
 
 app.post("/logout", (req, res) => {
   res.clearCookie("user_id");
-  res.redirect("/urls");
+  res.redirect("/login");
 });
 
 app.post("/urls", (req, res) => {
