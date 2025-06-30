@@ -46,6 +46,10 @@ const getUserByEmail = (email, users) => {
 
 // The routes
 
+app.get("/login", (req, res) => {
+  res.render("login");
+});
+
 app.get("/register", (req, res) => {
   res.render("register");
 });
@@ -73,7 +77,6 @@ app.post("/register", (req, res) => {
   res.cookie("user_id", id);
   res.redirect("/urls");
 });
-
 
 app.post("/login", (req, res) => {
   const username = req.body.username;
