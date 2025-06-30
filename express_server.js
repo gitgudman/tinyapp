@@ -3,6 +3,7 @@ const app = express();
 const PORT = 8080;
 
 const cookieParser = require("cookie-parser");
+const bcrypt = require("bcryptjs");
 
 app.set("view engine", "ejs");
 app.use(express.urlencoded({ extended: true }));
@@ -16,26 +17,20 @@ function generateRandomString() {
 
 // Databases
 const urlDatabase = {
-  b6UTxQ: {
-    longURL: "https://www.tsn.ca",
-    userID: "aJ48lW",
-  },
-  i3BoGr: {
-    longURL: "https://www.google.ca",
-    userID: "aJ48lW",
-  },
+  b6UTxQ: { longURL: "https://www.tsn.ca", userID: "potato" },
+  i3BoGr: { longURL: "https://www.google.ca", userID: "guest" },
 };
 
 const users = {
   potato: {
     id: "potato",
     email: "potato@apple.com",
-    password: "bigpotato",
+    password: bcrypt.hashSync("bigpotato", 10),
   },
   guest: {
     id: "guest",
     email: "guest@apple.com",
-    password: "tinyguest",
+    password: bcrypt.hashSync("tinyguest", 10),
   },
 };
 
@@ -58,7 +53,6 @@ const urlsForUser = function(id) {
   }
   return userUrls;
 };
-
 
 // Routes
 app.get("/login", (req, res) => {
@@ -87,7 +81,8 @@ app.post("/register", (req, res) => {
     return res.status(400).send("Email already exists.");
   }
   const id = generateRandomString();
-  const newUser = { id, email, password };
+  const hashedPassword = bcrypt.hashSync(password, 10);
+  const newUser = { id, email, password: hashedPassword };
   users[id] = newUser;
   res.cookie("user_id", id);
   res.redirect("/urls");
@@ -99,7 +94,7 @@ app.post("/login", (req, res) => {
   if (!user) {
     return res.status(403).send("No user with that email found.");
   }
-  if (user.password !== password) {
+  if (!bcrypt.compareSync(password, user.password)) {
     return res.status(403).send("Incorrect password.");
   }
   res.cookie("user_id", user.id);
@@ -146,7 +141,7 @@ app.post("/urls/:id", (req, res) => {
     return res.status(404).send("URL does not exist.");
   }
   if (!userId || url.userID !== userId) {
-    return res.status(403).send("Not allowed to view this URL.");
+    return res.status(403).send("Not authorized to edit this URL.");
   }
   urlDatabase[id].longURL = req.body.longURL;
   res.redirect("/urls");
@@ -200,13 +195,13 @@ app.get("/u/:id", (req, res) => {
   const id = req.params.id;
   const entry = urlDatabase[id];
   if (!entry) {
-    return res.status(404).send("ShortURL not found.");
+    return res.status(404).send("Short URL not found.");
   }
   res.redirect(entry.longURL);
 });
 
 app.get("/", (req, res) => {
-  res.send("Hello LHL Mentor!");
+  res.send("Hello!");
 });
 
 app.get("/urls.json", (req, res) => {
