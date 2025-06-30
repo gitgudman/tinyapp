@@ -24,18 +24,41 @@ app.post("/urls", (req, res) => {
   res.redirect(`/urls/${shortURL}`); // redirect to the new URL show page
 });
 
+app.post("/urls/:id/delete", (req, res) => {
+  const id = req.params.id; // Get the short URL id from the route
+  delete urlDatabase[id]; // Remove the URL from the database
+  res.redirect("/urls");
+});
+
+
 app.get("/u/:id", (req, res) => {
   const id = req.params.id;
   const longURL = urlDatabase[id].longURL;
   res.redirect(longURL);
 });
 
+app.get("/urls", (req, res) => {
+  const templateVars = { urls: urlDatabase }; // Pass the urlDatabase object
+  res.render("urls_index", templateVars);     // Render the index with URLs
+});
+// Place this above or below your existing routes, order does not matter for GETs
 
 
 app.get("/urls/new", (req, res) => {
   res.render("urls_new");
 });
 
+
+
+
+app.get('/u/:id', (req, res) => {
+  const shortURL = req.params.id; // The short URL code
+  const entry = urlDatabase[shortURL]; // Lookup in the database
+  if (!entry) {
+    return res.status(404).send('Short URL not found');
+  }
+  res.redirect(entry.longURL); // Redirect if found
+});
 
 app.get('/urls/:id', (req, res) => {
   const templateVars = {
@@ -44,7 +67,7 @@ app.get('/urls/:id', (req, res) => {
   };
   res.render("urls_show", templateVars);
 });
-
+    
   
 
 app.get("/urls", (req, res) => {

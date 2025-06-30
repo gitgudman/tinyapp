@@ -2,25 +2,19 @@
   "name": "tinyapp",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "express_server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/gitgudman/tinyapp.git"
-  },
-  "keywords": [],
-  "author": "",
+  "start": "./node_modules/.bin/nodemon -L express_server.js",
+  "dev": "nodemon -L express_server.js",
+  "test": "echo \"Error: no test specified\" && exit 1"
+},
+  "author": "Michael michaelquach604@gmail.com",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/gitgudman/tinyapp/issues"
-  },
-  "homepage": "https://github.com/gitgudman/tinyapp#readme",
   "dependencies": {
-    "bcryptjs": "^3.0.2",
-    "cookie-session": "^2.1.0",
-    "ejs": "^3.1.10",
-    "express": "^5.1.0"
+    "ejs": "^3.1.8",
+    "express": "^4.18.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.16"
   }
 }
