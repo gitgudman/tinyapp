@@ -21,12 +21,12 @@ const urlDatabase = {
 };
 
 const users = {
-  userRandomID: {
+  potato: {
     id: "potato",
     email: "potato@apple.com",
     password: "bigpotato",
   },
-  user2RandomID: {
+  guest: {
     id: "guest",
     email: "guest@apple.com",
     password: "tinyguest",
