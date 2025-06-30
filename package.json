@@ -18,6 +18,9 @@
   },
   "homepage": "https://github.com/gitgudman/tinyapp#readme",
   "dependencies": {
+    "bcryptjs": "^3.0.2",
+    "cookie-session": "^2.1.0",
+    "ejs": "^3.1.10",
     "express": "^5.1.0"
   }
 }
