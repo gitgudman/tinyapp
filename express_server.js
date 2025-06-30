@@ -32,6 +32,11 @@ app.post("/logout", (req, res) => {
   res.redirect("/urls");
 });
 
+app.get("/register", (req, res) => {
+  res.render("register");
+});
+
+
 
 app.post("/urls", (req, res) => {
   const shortURL = generateRandomString(); // generate a short URL id
