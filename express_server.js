@@ -17,7 +17,17 @@ const urlDatabase = {
   b2xVn2: { longURL: "http://www.lighthouselabs.ca" },
   "9sm5xK": { longURL: "http://www.google.com" }
 };
-  
+
+const cookieParser = require('cookie-parser');
+app.use(cookieParser());
+
+app.post('/login', (req, res) => {
+  const username = req.body.username;
+  res.cookie('username', username); // sets the cookie
+  res.redirect('/urls');
+});
+
+
 app.post("/urls", (req, res) => {
   const shortURL = generateRandomString(); // generate a short URL id
   urlDatabase[shortURL] = { longURL: req.body.longURL }; // save longURL to database
@@ -50,24 +60,12 @@ app.get("/urls", (req, res) => {
   const templateVars = { urls: urlDatabase }; // Pass the urlDatabase object
   res.render("urls_index", templateVars);     // Render the index with URLs
 });
-// Place this above or below your existing routes, order does not matter for GETs
 
 
 app.get("/urls/new", (req, res) => {
   res.render("urls_new");
 });
 
-
-
-
-// app.get('/u/:id', (req, res) => {
-//   const shortURL = req.params.id; // The short URL code
-//   const entry = urlDatabase[shortURL]; // Lookup in the database
-//   if (!entry) {
-//     return res.status(404).send('Short URL not found');
-//   }
-//   res.redirect(entry.longURL); // Redirect if found
-// });
 
 app.get('/urls/:id', (req, res) => {
   const templateVars = {
